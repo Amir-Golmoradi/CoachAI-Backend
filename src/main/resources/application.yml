@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8181
   error:
     include-message: always
 
@@ -7,19 +7,14 @@ spring:
   main:
     web-application-type: servlet
   application:
-    name: CoachBackend
+    name: CoachAI-Backend
     user-route: "api/v1/users/"
     auth-route: "api/v1/auth/"
   datasource:
-    url: jdbc:postgresql://localhost:5432/coachdb
-    username: amirgolmoradi
-    password: password
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USER_NAME}
+    password: ${DATABASE_PASSWORD}
     driver-class-name: org.postgresql.Driver
-    hikari:
-      minimum-idle: 5
-      maximum-pool-size: 10
-      idle-timeout: 30000
-      connection-timeout: 20000
   jpa:
     hibernate:
       ddl-auto: validate
@@ -34,16 +29,15 @@ spring:
       name: admin
       password: admin
     jwt:
-      secret-key: 3d4d28498689bac821ec4b1718fe41ac93bc56e6540eaa76e09679184efc87d1
+      secret-key: ${JWT_SECRET_KEY}
       expiration-time: 1_296_000_000 // 15 Days
 
 
     # Flyway Configuration
   flyway:
-    enabled: true
     baseline-on-migrate: true
     locations: db/migration
   # Logging Configuration
 logging:
   level:
-    org.springframework.security: TRACE
+    org.springframework.security: trace

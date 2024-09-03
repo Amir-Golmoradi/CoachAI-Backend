@@ -29,26 +29,29 @@ repositories {
 }
 
 dependencies {
+
+    implementation("org.springframework.boot:spring-boot-starter-web") // rest endpoint
+    /* Database Connectivity */
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
-    implementation("org.springframework.boot:spring-boot-starter-jdbc")
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    /* OAuth */
-    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
-    /* JSON WEB TOKEN */
-    implementation("io.jsonwebtoken:jjwt-api:${jsonWebToken}")
-    implementation("io.jsonwebtoken:jjwt-impl:${jsonWebToken}")
-    implementation("io.jsonwebtoken:jjwt-jackson:${jsonWebToken}")
+
+    /* SECURITY */
+    implementation("org.springframework.boot:spring-boot-starter-security") // core security
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client") // oauth2
+    implementation("io.jsonwebtoken:jjwt-api:${jsonWebToken}") // json web token
+    implementation("io.jsonwebtoken:jjwt-impl:${jsonWebToken}")  // json web token Impl
+    implementation("io.jsonwebtoken:jjwt-jackson:${jsonWebToken}")  // json web token Jackson
+    implementation("io.github.cdimascio:dotenv-java:3.0.0")
     /* SWAGGER */
     implementation("io.springfox:springfox-swagger2:3.0.0")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
 
     compileOnly("org.projectlombok:lombok")
-    /* FLYWAY MIGRATION */
+    /* STORAGE SECTION */
+    runtimeOnly("org.postgresql:postgresql") // core postgresql
     implementation("org.flywaydb:flyway-core:${flywayAndPostgreSQL}") // Core Flyway dependency
     implementation("org.flywaydb:flyway-database-postgresql:${flywayAndPostgreSQL}") // postgresql support
-    /* Core POSTGRESQL dependency */
-    runtimeOnly("org.postgresql:postgresql")
+
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")

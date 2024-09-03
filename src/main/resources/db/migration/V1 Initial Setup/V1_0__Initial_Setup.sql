@@ -1,0 +1,3 @@
+-- V1.0 Initial Setup
+-- This script initializes the database schema setup for the application.
+-- It is kept intentionally empty, serving as a starting point for migrations.

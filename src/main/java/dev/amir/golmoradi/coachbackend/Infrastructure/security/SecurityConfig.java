@@ -1,8 +1,7 @@
 package dev.amir.golmoradi.coachbackend.Infrastructure.security;
 
-import dev.amir.golmoradi.coachbackend.Infrastructure.security.jwt.JwtAuthFilter;
-import dev.amir.golmoradi.coachbackend.Infrastructure.security.service.UserDetailsServiceImpl;
-import lombok.RequiredArgsConstructor;
+import dev.amir.golmoradi.coachbackend.Infrastructure.security.jwt.JwtRequestFilter;
+import dev.amir.golmoradi.coachbackend.Infrastructure.security.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,11 +20,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthFilter jwtAuthFilter;
-    private final UserDetailsServiceImpl userDetailsService;
+    private final JwtRequestFilter jwtRequestFilter;
+    private final CustomUserDetailsService userDetailsService;
+
+    public SecurityConfig(JwtRequestFilter jwtRequestFilter, CustomUserDetailsService userDetailsService) {
+        this.jwtRequestFilter = jwtRequestFilter;
+        this.userDetailsService = userDetailsService;
+    }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -50,12 +54,12 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeHttp -> {
-                    authorizeHttp.requestMatchers("/").permitAll();
-                    authorizeHttp.requestMatchers("api/login").permitAll();
-                    authorizeHttp.anyRequest().authenticated();
+                    authorizeHttp.requestMatchers("/auth/**").permitAll();
+                    authorizeHttp.requestMatchers("/api/login").permitAll();
+                    authorizeHttp.anyRequest().fullyAuthenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
 

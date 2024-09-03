@@ -2,44 +2,69 @@ package dev.amir.golmoradi.coachbackend.Domain.entity;
 
 import dev.amir.golmoradi.coachbackend.Domain.enums.Gender;
 import dev.amir.golmoradi.coachbackend.Domain.enums.Roles;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 
-//@Table(name = "users", uniqueConstraints =
-//        {@UniqueConstraint(columnNames = "user_email", name = "unique_user_email")})
+import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.FetchType.EAGER;
+
+@Entity
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(name = "unique_user_email", columnNames = "user_email")
+})
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class User implements UserDetails {
     @Id
-//    @SequenceGenerator(name = "user_id_sequence", sequenceName = "user_id_sequence", allocationSize = 1)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_sequence")
-//    @Column(name = "user_id", nullable = false, updatable = false, columnDefinition = "BIGINT")
+    @SequenceGenerator(name = "user_id_sequence", sequenceName = "user_id_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_sequence")
+    @Column(name = "user_id", nullable = false, updatable = false, columnDefinition = "BIGINT")
     private Long id;
+
+    @Column(name = "user_name", nullable = false, columnDefinition = "TEXT")
     private String name;
+
+    @Column(name = "user_email", nullable = false, columnDefinition = "TEXT")
     private String email;
+
+    @Column(name = "user_age", nullable = false, columnDefinition = "Integer")
     private Integer age;
+
+    @Column(name = "user_password", nullable = false, columnDefinition = "Text")
     private String password;
 
-    //    @Enumerated(EnumType.STRING)
+    @Column(name = "user_gender", nullable = false)
+    @Enumerated(STRING)
     private Gender gender;
 
-
-    //    @Enumerated(EnumType.STRING)
-//    @Column(name = "roles", nullable = false)
-//    @ElementCollection(fetch = FetchType.EAGER, targetClass = Roles.class)
-//    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(STRING)
+    @Column(name = "roles", nullable = false)
+    @ElementCollection(fetch = EAGER, targetClass = Roles.class)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     private Set<Roles> roles = new HashSet<>();
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", age=" + age +
+                ", password='" + password + '\'' +
+                ", gender=" + gender +
+                ", roles=" + roles +
+                '}';
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -58,28 +83,24 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return UserDetails.super.isAccountNonExpired();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return UserDetails.super.isAccountNonLocked();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return UserDetails.super.isCredentialsNonExpired();
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return UserDetails.super.isEnabled();
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" + "id = " + id + ", " + "name = " + name + ", " + "email = " + email + ", " + "age = " + age + ", " + "password = " + password + ")";
-    }
 
     @Override
     public boolean equals(Object o) {
