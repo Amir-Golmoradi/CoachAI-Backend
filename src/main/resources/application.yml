@@ -8,8 +8,8 @@ spring:
     web-application-type: servlet
   application:
     name: CoachAI-Backend
-    user-route: "api/v1/users/"
-    auth-route: "api/v1/auth/"
+    user-route: "/api/v1/users/"
+    auth-route: "/api/v1/auth/"
   datasource:
     url: ${DATABASE_URL}
     username: ${DATABASE_USER_NAME}

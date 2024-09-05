@@ -17,9 +17,10 @@ import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.EAGER;
 
 @Entity
-@Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(name = "unique_user_email", columnNames = "user_email")
-})
+@Table(name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "unique_user_email",
+                        columnNames = "user_email")})
 @Getter
 @Setter
 @AllArgsConstructor
@@ -55,20 +56,12 @@ public class User implements UserDetails {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", age=" + age +
-                ", password='" + password + '\'' +
-                ", gender=" + gender +
-                ", roles=" + roles +
-                '}';
+        return "User{" + "id=" + id + ", name='" + name + '\'' + ", email='" + email + '\'' + ", age=" + age + ", password='" + password + '\'' + ", gender=" + gender + ", roles=" + roles + '}';
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(Roles.ATHLETE.name()));
+        return Collections.singleton(new SimpleGrantedAuthority(Roles.ATHLETE.name()));
     }
 
     @Override
