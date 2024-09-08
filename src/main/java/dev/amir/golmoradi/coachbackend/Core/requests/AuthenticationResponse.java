@@ -1,9 +1,13 @@
 package dev.amir.golmoradi.coachbackend.Core.requests;
 
-import dev.amir.golmoradi.coachbackend.Infrastructure.dto.UserDTO;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 
+@Builder
 public record AuthenticationResponse(
-        String token,
-        UserDTO userDTO
+        @JsonProperty("access_token")
+        String accessToken,
+        @JsonProperty("refresh_token")
+        String refreshToken
 ) {
 }
