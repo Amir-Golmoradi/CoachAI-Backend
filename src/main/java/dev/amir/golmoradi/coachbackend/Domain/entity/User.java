@@ -3,24 +3,22 @@ package dev.amir.golmoradi.coachbackend.Domain.entity;
 import dev.amir.golmoradi.coachbackend.Domain.enums.Gender;
 import dev.amir.golmoradi.coachbackend.Domain.enums.Roles;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 import static jakarta.persistence.EnumType.STRING;
-import static jakarta.persistence.FetchType.EAGER;
 
 @Entity
 @Table(name = "users",
         uniqueConstraints = {
                 @UniqueConstraint(name = "unique_user_email",
                         columnNames = "user_email")})
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
@@ -48,11 +46,12 @@ public class User implements UserDetails {
     @Enumerated(STRING)
     private Gender gender;
 
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
+
     @Enumerated(STRING)
-    @Column(name = "roles", nullable = false)
-    @ElementCollection(fetch = EAGER, targetClass = Roles.class)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    private Set<Roles> roles = new HashSet<>();
+    @Column(name = "user_role", nullable = false)
+    private Roles roles;
 
     @Override
     public String toString() {
@@ -61,7 +60,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(Roles.ATHLETE.name()));
+        return roles.getAuthorities();
     }
 
     @Override

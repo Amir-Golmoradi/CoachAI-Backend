@@ -14,13 +14,13 @@ import java.util.List;
 @RestController
 @RequestMapping("${spring.application.user-route}")
 public class UserController {
+    private final IUserUseCase userUseCase;
+    private final JwtTokenUtil jwtTokenUtil;
+
     public UserController(IUserUseCase userUseCase, JwtTokenUtil jwtTokenUtil) {
         this.userUseCase = userUseCase;
         this.jwtTokenUtil = jwtTokenUtil;
     }
-
-    private final IUserUseCase userUseCase;
-    private final JwtTokenUtil jwtTokenUtil;
 
     @GetMapping()
     public List<UserDTO> showAllUsers() {
@@ -40,7 +40,7 @@ public class UserController {
     @PostMapping()
     public ResponseEntity<User> createNewUser(@RequestBody UserRegistrationRequest request) {
         userUseCase.createUserUseCase(request);
-        String jwtToken = jwtTokenUtil.generateToken(request.email());
+        String jwtToken = jwtTokenUtil.generateDefaultAccessToken(request.email());
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, jwtToken)
                 .build();

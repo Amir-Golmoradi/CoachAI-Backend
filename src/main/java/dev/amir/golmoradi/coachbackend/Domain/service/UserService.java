@@ -68,7 +68,8 @@ public class UserService {
                 registrationRequest.age(),
                 registrationRequest.password(),
                 registrationRequest.gender(),
-                userRoleSet
+                registrationRequest.tokens(),
+                registrationRequest.roles()
         );
         userDao.addUser(newUser);
     }

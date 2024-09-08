@@ -23,11 +23,8 @@ public class UserRowMapper implements RowMapper<User> {
         user.setAge(rs.getInt("user_age"));
         user.setPassword(rs.getString("password")); // Make sure the column name is correct
         user.setGender(Gender.valueOf(rs.getString("gender").toUpperCase())); // Assuming gender is stored as a String
-
+        user.setRoles(Roles.ATHLETE);
         // Placeholder for roles - you will need to fetch the roles from the user_roles table
-        Set<Roles> roles = fetchRolesForUser(user.getId());
-        user.setRoles(roles);
-
         return user;
     }
 

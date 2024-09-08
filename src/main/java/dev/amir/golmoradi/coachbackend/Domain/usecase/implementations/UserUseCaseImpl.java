@@ -1,4 +1,4 @@
-package dev.amir.golmoradi.coachbackend.Domain.usecase.implementations.userImpl;
+package dev.amir.golmoradi.coachbackend.Domain.usecase.implementations;
 
 import dev.amir.golmoradi.coachbackend.Core.requests.UserRegistrationRequest;
 import dev.amir.golmoradi.coachbackend.Domain.service.UserService;

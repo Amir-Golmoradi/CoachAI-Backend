@@ -13,11 +13,16 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "token",
+        uniqueConstraints = {
+        @UniqueConstraint(name = "token_id_sequence",columnNames = "id")
+})
 @Builder
 public class Token {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "token_id_sequence", sequenceName = "token_id_sequence")
     public Long id;
 
     @Column(unique = true)
@@ -32,7 +37,6 @@ public class Token {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @ToString.Exclude
     public User user;
 
     @Override

@@ -1,5 +1,6 @@
 package dev.amir.golmoradi.coachbackend.Core.requests;
 
+import dev.amir.golmoradi.coachbackend.Domain.entity.Token;
 import dev.amir.golmoradi.coachbackend.Domain.enums.Gender;
 import dev.amir.golmoradi.coachbackend.Domain.enums.Roles;
 
@@ -13,6 +14,7 @@ public record UserRegistrationRequest(
         String email,
         String password,
         Gender gender,
-        Set<Roles> roles
+        Roles roles,
+        List<Token> tokens
 ) {
 }

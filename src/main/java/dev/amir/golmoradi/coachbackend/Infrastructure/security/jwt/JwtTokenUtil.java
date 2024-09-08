@@ -6,6 +6,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -16,12 +17,17 @@ import java.util.function.Function;
 
 @Component
 public class JwtTokenUtil {
+    private final UserDetailsService userDetailsService;
     @Value("${spring.security.jwt.secret-key}")
     private String secretKey;
     @Value("${spring.security.jwt.expiration-time}")
     private long accessTokenExpiration;
     @Value("${spring.security.jwt.refresh-token.expiration}")
     private long refreshExpiration;
+
+    public JwtTokenUtil(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     public String generateAccessToken(
             Map<String, Object> extraClaims,
@@ -68,7 +74,10 @@ public class JwtTokenUtil {
         return claimsResolver.apply(claims);
     }
 
-    public String generateDefaultAccessToken(UserDetails userDetails) {
+    public String generateDefaultAccessToken(String username) {
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
         return generateAccessToken(new HashMap<>(), userDetails);
     }
 

@@ -52,7 +52,7 @@ public class AuthenticationService {
                 .roles(registrationRequest.roles())
                 .build();
         var saveUser = repository.save(user);
-        var jwtToken = jwtService.generateDefaultAccessToken(user);
+        var jwtToken = jwtService.generateDefaultAccessToken(String.valueOf(user));
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(saveUser, jwtToken);
         return AuthenticationResponse
@@ -84,7 +84,7 @@ public class AuthenticationService {
         );
 
         var user = repository.findUserByEmail(request.email()).orElseThrow();
-        var jwtToken = jwtService.generateDefaultAccessToken(user);
+        var jwtToken = jwtService.generateDefaultAccessToken(String.valueOf(user));
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(user, jwtToken);
         revokeAllUserTokens(user);
@@ -122,7 +122,7 @@ public class AuthenticationService {
             var user = this.repository.findUserByEmail(userEmail)
                     .orElseThrow();
             if (jwtService.isTokenValidForUser(refreshToken, user)) {
-                var accessToken = jwtService.generateDefaultAccessToken(user);
+                var accessToken = jwtService.generateDefaultAccessToken(String.valueOf(user));
                 revokeAllUserTokens(user);
                 saveUserToken(user, accessToken);
                 var authResponse = AuthenticationResponse.builder()
